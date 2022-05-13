@@ -16,4 +16,4 @@ jobs:
       - run: flutter pub get
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          baseHref: /mu3een_dashboard/
+          baseHref: /Mu3eenDashboard/
