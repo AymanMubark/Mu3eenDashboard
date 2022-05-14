@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mu3een_dashboard/controllers/user_bloc.dart';
-import 'package:mu3een_dashboard/screens/login/login_screen.dart';
-import 'package:mu3een_dashboard/screens/main/main_screen.dart';
-import 'package:provider/provider.dart';
-import 'constants.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'screens/splash/splash_screen.dart';
 import 'controllers/menu_controller.dart';
-
-const Color mainColor = Color(0xff00AD78);
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'constants.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -34,8 +31,8 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              secondary: mainColor,
-              primary: mainColor,
+              secondary: primaryColor,
+              primary: primaryColor,
             ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -49,8 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        "/": (context) => LoginScreen(),
-        "/Main": (context) => MainScreen(),
+        "/": (context) => const SplashScreen(),
       },
     );
   }

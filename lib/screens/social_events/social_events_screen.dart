@@ -1,13 +1,14 @@
-import 'package:data_table_2/data_table_2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:mu3een_dashboard/apis/social_event_api.dart';
-import 'package:mu3een_dashboard/models/social_event.dart';
+import 'package:mu3een_dashboard/models/search_social_event_request.dart';
+import 'package:mu3een_dashboard/apis/social_event_type_api.dart';
+import 'package:mu3een_dashboard/models/social_event_type.dart';
 import 'package:mu3een_dashboard/utils/globle_functions.dart';
-
-import '../../constants.dart';
-import '../../models/recent_file.dart';
+import 'package:mu3een_dashboard/apis/social_event_api.dart';
+import 'package:mu3een_dashboard/widgets/search_field.dart';
+import 'package:mu3een_dashboard/models/social_event.dart';
+import 'package:data_table_2/data_table_2.dart';
 import '../dashboard/components/header.dart';
+import 'package:flutter/material.dart';
+import '../../constants.dart';
 
 class SocialEventsScreen extends StatefulWidget {
   const SocialEventsScreen({Key? key}) : super(key: key);
@@ -17,16 +18,7 @@ class SocialEventsScreen extends StatefulWidget {
 }
 
 class _SocialEventsScreenState extends State<SocialEventsScreen> {
-  String dropdownvalue = 'Item 1';
-
-  // List of items in our dropdown menu
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  SearchSocialEventRequest model = SearchSocialEventRequest();
 
   List<SocialEvent>? socialEvents;
   @override
@@ -36,7 +28,7 @@ class _SocialEventsScreenState extends State<SocialEventsScreen> {
   }
 
   load() {
-    SocialEventApi().all().then((value) {
+    SocialEventApi().all(model: model).then((value) {
       socialEvents = value;
       setState(() {});
     });
@@ -53,38 +45,21 @@ class _SocialEventsScreenState extends State<SocialEventsScreen> {
             const SizedBox(height: defaultPadding),
             Row(
               children: [
-                const Expanded(child: SearchField()),
+                Expanded(
+                  child: SearchField(
+                    onSubmitted: (value) {
+                      model.key = value;
+                      load();
+                    },
+                  ),
+                ),
                 const SizedBox(width: 50),
                 Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: DropdownButton(
-                      // Initial Value
-                      value: dropdownvalue,
-                      elevation: 0, underline: const SizedBox(),
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      isExpanded: true,
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownvalue = newValue!;
-                        });
-                      },
-                    ),
+                  child: SocialTypeDropDown(
+                    onChange: (SocialEventType value) {
+                      model.socialEventTypeId = value.id;
+                      load();
+                    },
                   ),
                 ),
               ],
@@ -106,7 +81,7 @@ class _SocialEventsScreenState extends State<SocialEventsScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: socialEvents == null
-                        ? Center(child: const CircularProgressIndicator())
+                        ? const Center(child: CircularProgressIndicator())
                         : DataTable2(
                             columnSpacing: defaultPadding,
                             minWidth: 600,
@@ -159,4 +134,63 @@ DataRow socialEventDataRow(SocialEvent socialEvent, index) {
       DataCell(Text(socialEvent.points!.toString())),
     ],
   );
+}
+
+class SocialTypeDropDown extends StatefulWidget {
+  final Function onChange;
+  const SocialTypeDropDown({Key? key, required this.onChange})
+      : super(key: key);
+
+  @override
+  State<SocialTypeDropDown> createState() => _SocialTypeDropDownState();
+}
+
+class _SocialTypeDropDownState extends State<SocialTypeDropDown> {
+  List<SocialEventType>? types;
+  SocialEventType? selectType;
+
+  @override
+  void initState() {
+    super.initState();
+    load();
+  }
+
+  load() {
+    SocialEventTypeApi().all().then((value) {
+      types = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return types == null
+        ? const SizedBox()
+        : Container(
+            decoration: const BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: DropdownButton(
+              value: selectType,
+              elevation: 0,
+              underline: const SizedBox(),
+              icon: const Icon(Icons.keyboard_arrow_down),
+              isExpanded: true,
+              hint: const Text("All Type"),
+              items: types!.map((SocialEventType type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(type.name!),
+                );
+              }).toList(),
+              onChanged: (SocialEventType? newValue) {
+                setState(() {
+                  selectType = newValue;
+                  widget.onChange(selectType);
+                });
+              },
+            ),
+          );
+  }
 }

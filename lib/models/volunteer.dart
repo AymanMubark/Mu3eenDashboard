@@ -1,29 +1,31 @@
-class Admin {
+class Volunteer {
   String? id;
   String? name;
-  String? userName;
-  String? phone;
-  String? email;
   String? imageUrl;
+  String? gender;
+  String? phone;
+  int? age;
+  int? points;
   String? createdAt;
 
-  Admin(
+  Volunteer(
       {this.id,
       this.name,
-      this.userName,
-      this.phone,
-      this.email,
-      this.createdAt,
-      this.imageUrl});
+      this.imageUrl,
+      this.gender,
+      this.age,
+      this.points,
+      this.createdAt});
 
-  Admin.fromJson(Map<String, dynamic> json) {
+  Volunteer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    userName = json['userName'];
     createdAt = json['createdAt'];
     phone = json['phone'];
-    email = json['email'];
     imageUrl = json['imageUrl'];
+    gender = json['gender'];
+    age = json['age'];
+    points = json['points'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,10 +33,11 @@ class Admin {
     data['id'] = id;
     data['name'] = name;
     data['createdAt'] = createdAt;
-    data['userName'] = userName;
     data['phone'] = phone;
-    data['email'] = email;
     data['imageUrl'] = imageUrl;
+    data['gender'] = gender;
+    data['age'] = age;
+    data['points'] = points;
     return data;
   }
 }

@@ -1,29 +1,20 @@
-class Admin {
+class Institution {
   String? id;
   String? name;
-  String? userName;
   String? phone;
   String? email;
   String? imageUrl;
   String? createdAt;
 
-  Admin(
-      {this.id,
-      this.name,
-      this.userName,
-      this.phone,
-      this.email,
-      this.createdAt,
-      this.imageUrl});
+  Institution({this.id, this.name, this.phone, this.email, this.imageUrl});
 
-  Admin.fromJson(Map<String, dynamic> json) {
+  Institution.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    userName = json['userName'];
-    createdAt = json['createdAt'];
     phone = json['phone'];
     email = json['email'];
     imageUrl = json['imageUrl'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,7 +22,6 @@ class Admin {
     data['id'] = id;
     data['name'] = name;
     data['createdAt'] = createdAt;
-    data['userName'] = userName;
     data['phone'] = phone;
     data['email'] = email;
     data['imageUrl'] = imageUrl;

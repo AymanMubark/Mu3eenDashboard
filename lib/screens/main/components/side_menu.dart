@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mu3een_dashboard/screens/admins/admins_screen.dart';
+import 'package:mu3een_dashboard/screens/admins/update_profile_screen.dart';
+import 'package:mu3een_dashboard/screens/rewords/rewards_screen.dart';
+import 'package:mu3een_dashboard/screens/volunteers/volunteers_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controllers/menu_controller.dart';
 import '../../dashboard/dashboard_screen.dart';
+import '../../institution/institutions_screen.dart';
 import '../../social_events/social_events_screen.dart';
 
 class SideMenu extends StatelessWidget {
@@ -28,6 +33,13 @@ class SideMenu extends StatelessWidget {
             },
           ),
           DrawerListTile(
+            title: "Users",
+            svgSrc: "assets/icons/menu_profile.svg",
+            press: () {
+              context.read<MenuController>().currentPage = const AdminsScreen();
+            },
+          ),
+          DrawerListTile(
             title: "Events",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {
@@ -36,34 +48,36 @@ class SideMenu extends StatelessWidget {
             },
           ),
           DrawerListTile(
-            title: "Providers",
+            title: "Institutions",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
+            press: () {
+              context.read<MenuController>().currentPage =
+                  const InstitutionsScreen();
+            },
           ),
           DrawerListTile(
             title: "Volunteers",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
+            press: () {
+              context.read<MenuController>().currentPage =
+                  const VolunteersScreen();
+            },
           ),
           DrawerListTile(
-            title: "Rewords",
+            title: "Rewards",
             svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
+            press: () {
+              context.read<MenuController>().currentPage =
+                  const RewardsScreen();
+            },
           ),
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Settings",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
+            press: () {
+              context.read<MenuController>().currentPage =
+                  const UpdateProfileScreen();
+            },
           ),
         ],
       ),

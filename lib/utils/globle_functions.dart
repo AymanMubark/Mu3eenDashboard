@@ -1,6 +1,9 @@
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:intl/intl.dart';
-import '../main.dart';
+import 'package:mu3een_dashboard/constants.dart';
+import 'dart:typed_data';
 
 showDialogProgressIndicator(BuildContext context) {
   AlertDialog alert = AlertDialog(
@@ -9,7 +12,7 @@ showDialogProgressIndicator(BuildContext context) {
     content: Container(
       child: const Center(
         child: CircularProgressIndicator(
-          color: mainColor,
+          color: primaryColor,
         ),
       ),
     ),
@@ -28,6 +31,22 @@ showDialogProgressIndicator(BuildContext context) {
           child: alert);
     },
   );
+}
+
+Future<Uint8List?> _loadImage(html.File file) async {
+  final reader = html.FileReader();
+  reader.readAsArrayBuffer(file);
+  await reader.onLoad.first;
+  reader.onLoadEnd;
+  return reader.result as Uint8List;
+}
+
+Future<Uint8List?> selectImage(context) async {
+  var file = await ImagePickerWeb.getImageAsFile();
+  if (file != null) {
+    return _loadImage(file);
+  }
+  return null;
 }
 
 buildDateTime(String datetime, {String customeFromat = 'dd/MM/yyyy hh:mm a'}) {
