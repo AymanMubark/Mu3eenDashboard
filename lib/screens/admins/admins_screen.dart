@@ -2,6 +2,7 @@ import 'package:mu3een_dashboard/utils/globle_functions.dart';
 import 'package:mu3een_dashboard/widgets/search_field.dart';
 import 'package:data_table_2/data_table_2.dart';
 import '../../models/search_admin_request.dart';
+import '../../widgets/my_image.dart';
 import '../../widgets/svg_widget.dart';
 import '../dashboard/components/header.dart';
 import '../../apis/admin_api.dart';
@@ -115,11 +116,11 @@ DataRow adminDataRow(Admin admin, index) {
             CircleAvatar(
               backgroundColor: primaryColor,
               child: admin.imageUrl != null
-                  ? null
+                  ? ClipRRect(
+                      child: Image.network(admin.imageUrl!),
+                      borderRadius: BorderRadius.circular(50),
+                    )
                   : const SVGWidget("logo", height: 15),
-              backgroundImage: admin.imageUrl != null
-                  ? NetworkImage("${admin.imageUrl}")
-                  : null,
               radius: 20,
             ),
             Padding(

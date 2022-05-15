@@ -5,6 +5,7 @@ import '../../../constants.dart';
 import '../../../controllers/menu_controller.dart';
 import '../../../controllers/user_bloc.dart';
 import '../../../responsive.dart';
+import '../../../widgets/my_image.dart';
 import '../../../widgets/svg_widget.dart';
 
 class Header extends StatelessWidget {
@@ -59,11 +60,14 @@ class ProfileCard extends StatelessWidget {
           CircleAvatar(
             backgroundColor: primaryColor,
             child: context.watch<UserBloc>().admin!.imageUrl != null
-                ? null
+                ? ClipRRect(
+                    child: Image.network(
+                      context.watch<UserBloc>().admin!.imageUrl!,
+                      fit: BoxFit.fill,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                  )
                 : const SVGWidget("logo", height: 15),
-            backgroundImage: context.watch<UserBloc>().admin!.imageUrl != null
-                ? NetworkImage("${context.watch<UserBloc>().admin!.imageUrl}")
-                : null,
             radius: 20,
           ),
           if (!Responsive.isMobile(context))

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mu3een_dashboard/models/admin_response.dart';
 import 'package:mu3een_dashboard/models/admin.dart';
 import '../models/admin_update_request.dart';
@@ -45,8 +47,9 @@ class AdminApi extends Api {
     // headers.addAll({"Authorization": ApiService.userToken!});
     request.headers.addAll(headers);
     if (model.image != null) {
-      request.files
-          .add(await http.MultipartFile.fromBytes('Image', model.image!));
+      List<int> list = model.image!.cast();
+      request.files.add(
+          http.MultipartFile.fromBytes('image', list, filename: 'myFile.png'));
     }
     http.StreamedResponse response = await request.send();
     var body = jsonDecode(await handelStreamResponse(response));
@@ -59,19 +62,18 @@ class AdminApi extends Api {
     request.fields.addAll({
       'name': model.name ?? "",
       'email': model.email ?? "",
+      'password': model.password ?? "",
+      'userName': model.userName ?? "",
     });
     // headers.addAll({"Authorization": ApiService.userToken!});
     request.headers.addAll(headers);
     if (model.image != null) {
-      request.files.add(http.MultipartFile.fromBytes('Image', model.image!));
+      List<int> list = model.image!.cast();
+      request.files.add(
+          http.MultipartFile.fromBytes('image', list, filename: 'myFile.png'));
     }
     http.StreamedResponse response = await request.send();
     var body = jsonDecode(await handelStreamResponse(response));
     return Admin.fromJson(body);
-  }
-
-  ConvertFileToCast(data) {
-    List<int> list = data.cast();
-    return list;
   }
 }

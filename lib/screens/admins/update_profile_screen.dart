@@ -2,17 +2,14 @@ import 'dart:typed_data';
 
 import 'package:mu3een_dashboard/models/admin_update_request.dart';
 import 'package:mu3een_dashboard/utils/globle_functions.dart';
-import 'package:mu3een_dashboard/widgets/search_field.dart';
-import 'package:data_table_2/data_table_2.dart';
-import 'package:provider/provider.dart';
-import '../../controllers/user_bloc.dart';
-import '../../models/search_admin_request.dart';
-import '../../widgets/svg_widget.dart';
 import '../dashboard/components/header.dart';
-import '../../apis/admin_api.dart';
+import '../../controllers/user_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/my_image.dart';
 import '../../models/admin.dart';
 import '../../constants.dart';
+import 'dart:io';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -50,10 +47,41 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () {
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 2),
+                      ),
+                      child: (model.image == null &&
+                              context.watch<UserBloc>().admin!.imageUrl == null)
+                          ? Center(
+                              child: Icon(Icons.camera_alt,
+                                  color: Theme.of(context).colorScheme.primary),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: model.image != null
+                                  ? Image.memory(
+                                      model.image!,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Image.network(
+                                      context
+                                          .watch<UserBloc>()
+                                          .admin!
+                                          .imageUrl!,
+                                    ),
+                            ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
                         selectImage(context).then((Uint8List? value) {
                           if (value != null) {
                             model.image = value;
@@ -61,46 +89,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           }
                         });
                       },
-                      child: Container(
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: model.image != null
-                                ? DecorationImage(
-                                    image: MemoryImage(model.image!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : context.watch<UserBloc>().admin!.imageUrl !=
-                                        null
-                                    ? DecorationImage(
-                                        image: NetworkImage(
-                                          context
-                                              .watch<UserBloc>()
-                                              .admin!
-                                              .imageUrl!,
-                                        ),
-                                        fit: BoxFit.fill,
-                                      )
-                                    : null,
-                            border: Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 2)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (model.image == null &&
-                                context.watch<UserBloc>().admin!.imageUrl ==
-                                    null)
-                              Center(
-                                child: Icon(Icons.camera_alt,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              ),
-                          ],
-                        ),
-                      ),
+                      child: Text("Change Image"),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -131,6 +120,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      initialValue: context.watch<UserBloc>().admin!.email,
                       validator: (value) {
                         // if (!EmailValidator.validate(value!)) {
                         //   return "Enter the email correctly";
@@ -160,14 +150,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          context.read<UserBloc>().update(model, context);
-                        }
-                      },
-                      child: const Text("Save"),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            context.read<UserBloc>().update(model, context);
+                          }
+                        },
+                        child: const Text("Save"),
+                      ),
                     ),
                   ],
                 ),
@@ -188,12 +181,10 @@ DataRow adminDataRow(Admin admin, index) {
           children: [
             CircleAvatar(
               backgroundColor: primaryColor,
-              child: admin.imageUrl != null
-                  ? null
-                  : const SVGWidget("logo", height: 15),
-              backgroundImage: admin.imageUrl != null
-                  ? NetworkImage("${admin.imageUrl}")
-                  : null,
+              child: ClipRRect(
+                child: Image.network(admin.imageUrl!),
+                borderRadius: BorderRadius.circular(50),
+              ),
               radius: 20,
             ),
             Padding(

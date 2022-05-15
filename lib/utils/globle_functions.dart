@@ -44,7 +44,7 @@ Future<Uint8List?> _loadImage(html.File file) async {
 Future<Uint8List?> selectImage(context) async {
   var file = await ImagePickerWeb.getImageAsFile();
   if (file != null) {
-    return _loadImage(file);
+    return await _loadImage(file);
   }
   return null;
 }

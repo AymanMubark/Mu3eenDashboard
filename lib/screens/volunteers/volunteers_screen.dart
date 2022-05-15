@@ -1,4 +1,5 @@
 import 'package:mu3een_dashboard/utils/globle_functions.dart';
+import 'package:mu3een_dashboard/widgets/my_image.dart';
 import 'package:mu3een_dashboard/widgets/search_field.dart';
 import 'package:data_table_2/data_table_2.dart';
 import '../../models/search_volunteer_request.dart';
@@ -81,10 +82,10 @@ class _VolunteersScreenState extends State<VolunteersScreen> {
                                 label: Text("Name"),
                               ),
                               DataColumn(
-                                label: Text("Gender"),
+                                label: Text("Phone"),
                               ),
                               DataColumn(
-                                label: Text("Phone"),
+                                label: Text("Gender"),
                               ),
                               DataColumn(
                                 label: Text("Points"),
@@ -119,22 +120,24 @@ DataRow volunteerDataRow(Volunteer volunteer, index) {
             CircleAvatar(
               backgroundColor: primaryColor,
               child: volunteer.imageUrl != null
-                  ? null
+                  ? ClipRRect(
+                      child: Image.network(volunteer.imageUrl!),
+                      borderRadius: BorderRadius.circular(50),
+                    )
                   : const SVGWidget("logo", height: 15),
-              backgroundImage: volunteer.imageUrl != null
-                  ? NetworkImage("${volunteer.imageUrl}")
-                  : null,
               radius: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text("${volunteer.name}"),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text("${volunteer.name}"),
+              ),
             ),
           ],
         ),
       ),
-      DataCell(Text(volunteer.gender ?? "-")),
       DataCell(Text("${volunteer.phone}")),
+      DataCell(Text(volunteer.gender ?? "-")),
       DataCell(Text("${volunteer.points}")),
       DataCell(Text(buildDateTime("${volunteer.createdAt}",
           customeFromat: 'dd/MM/yyyy'))),
