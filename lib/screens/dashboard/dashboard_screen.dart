@@ -4,9 +4,9 @@ import '../../constants.dart';
 import '../../responsive.dart';
 import 'components/header.dart';
 
-import 'components/my_fields.dart';
-import 'components/recent_files.dart';
-import 'components/storage_details.dart';
+import 'components/my_admin_counts_report.dart';
+import 'components/recent_events.dart';
+import 'components/social_events_report_widget.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -27,12 +27,13 @@ class DashboardScreen extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      const MyFiles(),
+                      const MyAdminCountsReport(),
                       const SizedBox(height: defaultPadding),
-                      const RecentFiles(),
+                      const RecentEvents(),
                       if (Responsive.isMobile(context))
                         const SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context)) const StarageDetails(),
+                      if (Responsive.isMobile(context))
+                        const SocialEventsReportWidget(),
                     ],
                   ),
                 ),
@@ -42,7 +43,7 @@ class DashboardScreen extends StatelessWidget {
                 if (!Responsive.isMobile(context))
                   const Expanded(
                     flex: 2,
-                    child: StarageDetails(),
+                    child: SocialEventsReportWidget(),
                   ),
               ],
             )

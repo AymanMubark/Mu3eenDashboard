@@ -76,6 +76,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                           .watch<UserBloc>()
                                           .admin!
                                           .imageUrl!,
+                                      fit: BoxFit.cover,
                                     ),
                             ),
                     ),
@@ -171,33 +172,4 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
     );
   }
-}
-
-DataRow adminDataRow(Admin admin, index) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: primaryColor,
-              child: ClipRRect(
-                child: Image.network(admin.imageUrl!),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              radius: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text("${admin.name}"),
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text("${admin.email}")),
-      DataCell(Text("${admin.userName}")),
-      DataCell(Text(
-          buildDateTime("${admin.createdAt}", customeFromat: 'dd/MM/yyyy'))),
-    ],
-  );
 }

@@ -115,13 +115,20 @@ DataRow adminDataRow(Admin admin, index) {
           children: [
             CircleAvatar(
               backgroundColor: primaryColor,
-              child: admin.imageUrl != null
-                  ? ClipRRect(
-                      child: Image.network(admin.imageUrl!),
-                      borderRadius: BorderRadius.circular(50),
+              backgroundImage: admin.imageUrl != null
+                  ? NetworkImage(
+                      admin.imageUrl!,
                     )
-                  : const SVGWidget("logo", height: 15),
+                  : null,
               radius: 20,
+              child: admin.imageUrl == null
+                  ? Text(
+                      admin.name![0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    )
+                  : null,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),

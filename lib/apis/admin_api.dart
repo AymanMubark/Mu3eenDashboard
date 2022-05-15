@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:mu3een_dashboard/models/admin_counts_report.dart';
 import 'package:mu3een_dashboard/models/admin_response.dart';
 import 'package:mu3een_dashboard/models/admin.dart';
+import 'package:mu3een_dashboard/models/socail_events_report.dart';
 import '../models/admin_update_request.dart';
 import '../models/search_admin_request.dart';
 import 'package:http/http.dart' as http;
@@ -75,5 +77,21 @@ class AdminApi extends Api {
     http.StreamedResponse response = await request.send();
     var body = jsonDecode(await handelStreamResponse(response));
     return Admin.fromJson(body);
+  }
+
+  Future<AdminCountsReport> countsReport() async {
+    var response = await http.get(
+        Uri.parse("${Api.apiUrl}/Admins/AdminCountsReport"),
+        headers: headers);
+    var body = jsonDecode(handelResponse(response));
+    return AdminCountsReport.fromJson(body);
+  }
+
+  Future<SocailEventsReport> socailEventsReport() async {
+    var response = await http.get(
+        Uri.parse("${Api.apiUrl}/Admins/SocailEventsReport"),
+        headers: headers);
+    var body = jsonDecode(handelResponse(response));
+    return SocailEventsReport.fromJson(body);
   }
 }

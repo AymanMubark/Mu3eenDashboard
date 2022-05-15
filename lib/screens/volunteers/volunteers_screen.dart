@@ -124,7 +124,12 @@ DataRow volunteerDataRow(Volunteer volunteer, index) {
                       child: Image.network(volunteer.imageUrl!),
                       borderRadius: BorderRadius.circular(50),
                     )
-                  : const SVGWidget("logo", height: 15),
+                  : Text(
+                      volunteer.name![0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
               radius: 20,
             ),
             Flexible(

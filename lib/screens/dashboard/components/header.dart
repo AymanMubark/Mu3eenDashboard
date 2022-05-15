@@ -59,15 +59,12 @@ class ProfileCard extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: primaryColor,
+            backgroundImage: context.watch<UserBloc>().admin!.imageUrl != null
+                ? NetworkImage(context.watch<UserBloc>().admin!.imageUrl!)
+                : null,
             child: context.watch<UserBloc>().admin!.imageUrl != null
-                ? ClipRRect(
-                    child: Image.network(
-                      context.watch<UserBloc>().admin!.imageUrl!,
-                      fit: BoxFit.fill,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  )
-                : const SVGWidget("logo", height: 15),
+                ? null
+                : const SVGWidget("logo"),
             radius: 20,
           ),
           if (!Responsive.isMobile(context))
