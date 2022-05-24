@@ -64,7 +64,7 @@ class _RecentEventsState extends State<RecentEvents> {
                       ),
                     ],
                     rows: List.generate(
-                      7,
+                      socialEvents!.length > 7 ? 7 : socialEvents!.length,
                       (index) =>
                           socialEventDataRow(socialEvents![index], index),
                     ),
